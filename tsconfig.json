@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "outDir": "./public/",
+        "sourceMap": true,
+        "jsx": "react",
+        "experimentalDecorators": true
+    },
+    "exclude": [
+        "node_modules",
+        ".vscode-test"
+    ]
+}
