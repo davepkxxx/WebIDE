@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import * as React from 'react';
 import { Component, Props } from 'react';
 import Dialog from 'material-ui/Dialog';
-import { List, ListItem } from 'material-ui/List';
+import { List, ListItem, makeSelectable } from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
 import FolderIcon from 'material-ui/svg-icons/file/folder';
 import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
@@ -42,6 +42,7 @@ class FileChooserDialog extends Component<FileChooserDialogProps, any> {
 }
 
 interface FileChooserListState {
+    value?: string
     files: File[]
 }
 
@@ -54,6 +55,8 @@ const enum FileType {
     FILE,
     FOLDER
 }
+
+const SelectableList = makeSelectable(List);
 
 class FileChooserList extends Component<any, FileChooserListState> {
 
@@ -78,19 +81,23 @@ class FileChooserList extends Component<any, FileChooserListState> {
         });
     }
 
+    handleChange = (event: __MaterialUI.TouchTapEvent, value: string) => {
+        this.setState({ value: value });
+    }
+
     render() {
-        let { files } = this.state;
+        let { value, files } = this.state;
         return (
-            <List>
+            <SelectableList value={value} onChange={this.handleChange}>
                 {
                     files.map((file, i) => {
                         let icon = file.type === FileType.FOLDER ? <FolderIcon /> : <FileIcon />;
                         return (
-                            <ListItem primaryText={file.name} leftIcon={icon} key={i} />
+                            <ListItem value={file.name} primaryText={file.name} leftIcon={icon} key={i} />
                         );
                     })
                 }
-            </List>
+            </SelectableList>
         );
     }
 
