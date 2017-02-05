@@ -64,10 +64,15 @@ class FileChooserList extends Component<any, FileChooserListState> {
             return res.json<any[]>();
         }).then(arr => {
             let files: File[] = arr.map(obj => {
-                return {
-                    name: obj.name,
-                    type: obj.type === 'folder' ? FileType.FOLDER : FileType.FILE
-                };
+                let type = obj.type === 'folder' ? FileType.FOLDER : FileType.FILE;
+                return { name: obj.name, type: type };
+            });
+            files = files.sort((a, b) => {
+                if (a.type === b.type) {
+                    return a.name > b.name ? 1 : -1;
+                } else {
+                    return b.type === FileType.FOLDER ? 1 : -1
+                }
             });
             this.setState({ files: files });
         });
